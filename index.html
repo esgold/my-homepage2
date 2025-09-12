@@ -4,10 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Homepage</title>
-    <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css">
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.querySelector('.contact-btn');
+                var body = document.body;
+                // Confetti setup
+                var canvas = document.getElementById('confetti-canvas');
+                var ctx = null;
+                var confetti = [];
+                var running = false;
+                function resizeCanvas() {
+                    if (!canvas) return;
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                window.addEventListener('resize', resizeCanvas);
+
+                function randomColor() {
+                    var colors = ['#ff5e7e', '#ffb347', '#59e3c6', '#a259c6', '#43ea7c', '#fff700'];
+                    return colors[Math.floor(Math.random() * colors.length)];
+                }
+
+                function createConfettiPiece() {
+                    return {
+                        x: Math.random() * canvas.width,
+                        y: -10,
+                        r: Math.random() * 8 + 4,
+                        d: Math.random() * 2 + 1,
+                        color: randomColor(),
+                        tilt: Math.random() * 10 - 5,
+                        tiltAngle: 0,
+                        tiltAngleInc: Math.random() * 0.1 + 0.05
+                    };
+                }
+
+                function drawConfetti() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    confetti.forEach(function(p) {
+                        ctx.beginPath();
+                        ctx.arc(p.x + p.tilt, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.fill();
+                    });
+                }
+
+                function updateConfetti() {
+                    confetti.forEach(function(p) {
+                        p.y += p.d;
+                        p.tiltAngle += p.tiltAngleInc;
+                        p.tilt = Math.sin(p.tiltAngle) * 8;
+                    });
+                    confetti = confetti.filter(function(p) {
+                        return p.y < canvas.height + 20;
+                    });
+                }
+
+                function animateConfetti() {
+                    if (!running) return;
+                    drawConfetti();
+                    updateConfetti();
+                    if (confetti.length < 100) {
+                        confetti.push(createConfettiPiece());
+                    }
+                    requestAnimationFrame(animateConfetti);
+                }
+
+                btn.addEventListener('mouseenter', function() {
+                    body.style.background = 'linear-gradient(135deg, #43ea7c 0%, #1fa34a 100%)';
+                    if (!canvas) {
+                        canvas = document.getElementById('confetti-canvas');
+                    }
+                    if (!canvas) return;
+                    ctx = canvas.getContext('2d');
+                    resizeCanvas();
+                    running = true;
+                    confetti = [];
+                    animateConfetti();
+                });
+                btn.addEventListener('mouseleave', function() {
+                    body.style.background = '';
+                    running = false;
+                    if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+                });
+            });
+        </script>
 </head>
 <body>
-    <div class="container">
+    <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;"></canvas>
+    <div class="container" style="position:relative;z-index:1;">
         <h1>Hello World</h1>
         <div class="profile-pic-wrapper">
             <img src="profile.jpg" alt="My Photo" class="profile-pic">
