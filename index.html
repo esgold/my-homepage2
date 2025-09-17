@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Homepage</title>
-        <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/weather-widget.css">
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var btn = document.querySelector('.contact-btn');
@@ -98,6 +99,10 @@
             <img src="profile.jpg" alt="My Photo" class="profile-pic">
         </div>
         <a href="mailto:your.email@example.com" class="contact-btn">Contact Me</a>
+        <!-- Weather Widget Container -->
+        <div id="weather-widget">
+          <div class="weather-loading">Loading weather...</div>
+        </div>
     </div>
 </body>
 </html>

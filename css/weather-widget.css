@@ -1,0 +1,17 @@
+#weather-widget {
+  width: 320px;
+  margin: 32px auto;
+  padding: 24px 18px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(162,89,198,0.12);
+  text-align: center;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  position: relative;
+}
+.weather-loading {
+  color: #a259c6;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 24px 0;
+}
