@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
   const widget = document.getElementById('weather-widget');
-  const loading = widget.querySelector('.weather-loading');
+  let loading = widget.querySelector('.weather-loading');
 
   function showError(message) {
     widget.innerHTML = `<div class="weather-error">${message}</div>`;
@@ -13,11 +13,14 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="weather-error">Location permission denied.<br>Please enter your city:</div>
       <input type="text" id="manual-location" placeholder="City name" style="margin:12px 0;padding:8px;width:80%;border-radius:6px;border:1px solid #ccc;">
       <button id="manual-submit" style="padding:8px 16px;border-radius:6px;background:#a259c6;color:#fff;border:none;">Submit</button>
+      <div class="weather-loading" style="display:none;">Fetching weather...</div>
     `;
     document.getElementById('manual-submit').onclick = function() {
       const city = document.getElementById('manual-location').value;
       if (city) {
-        loading.textContent = 'Fetching weather...';
+        // Show loading
+        const loadingDiv = widget.querySelector('.weather-loading');
+        loadingDiv.style.display = 'block';
         fetchCityWeather(city);
       }
     };
@@ -34,7 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function fetchWeather(lat, lon) {
-    loading.textContent = 'Fetching weather...';
+  // If loading element exists, update it
+  loading = widget.querySelector('.weather-loading');
+  if (loading) loading.textContent = 'Fetching weather...';
     fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto`)
       .then(res => res.json())
       .then(data => {
